@@ -53,7 +53,7 @@ plugin = {
 
 Add this line to your application's Gemfile:
 
-    gem ' logger-facade-ruby'
+    gem ' logger-facade'
 
 And then execute:
 
@@ -61,17 +61,18 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install logger-facade-ruby
+    $ gem install logger-facade
 
 ## How to use it
 
 Install it:
 
 ```
-gem install logger-facade-ruby
+gem install logger-facade
 ```
 
 Set up plugins
+
 ```ruby
 require 'logger-facade'
 
