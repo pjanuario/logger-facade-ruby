@@ -1,4 +1,4 @@
-require_relative 'zss/version'
+require_relative 'logger_facade/version'
 
 
 module LoggerFacade
