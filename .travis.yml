@@ -1,0 +1,16 @@
+language: ruby
+cache:
+  - bundler
+  - apt
+rvm:
+  - 2.1.2
+branches:
+  only:
+    - master
+env:
+  global:
+    - DISPLAY=:99.0
+before_install:
+  - gem install bundler --no-rdoc --no-ri 1>/dev/null
+script:
+  - "bundle exec rspec"
