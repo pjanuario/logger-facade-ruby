@@ -12,7 +12,7 @@ $:.push '.'
 
 require 'rspec'
 require 'pry'
-require 'logger-facade'
+require 'logger_facade'
 
 Dir['spec/support/**/*.rb'].each &method(:require)
 
