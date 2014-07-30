@@ -7,9 +7,14 @@ Gem::Specification.new do |spec|
   spec.version       = LoggerFacade::VERSION
   spec.authors       = ["Pedro Januário"]
   spec.email         = ["prnjanuario@gmail.com"]
-  spec.description   = %q{Logger Facade library}
+  spec.description   = %q{Simple class library to work as logger facade.
+                        This simple logger facade allows you to hook plugins to execute logging.}
   spec.summary       = %q{Logger Facade library}
   spec.homepage      = "https://github.com/pjanuario/logger-facade-ruby"
+  spec.metadata      = {
+    "source_code" => "https://github.com/pjanuario/logger-facade-ruby",
+    "issue_tracker" => "https://github.com/pjanuario/logger-facade-ruby/issues"
+  }
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
