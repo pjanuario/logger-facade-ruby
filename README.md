@@ -12,48 +12,11 @@ Simple class library to work as logger facade.
 
 This simple logger facade allows you to hook plugins to execute logging.
 
-The logger facade contract:
-
-```ruby
-# register a plugin on logger
-Logger.use(plugin)
-# retrieve the list of plugin names
-Logger.plugins()
-# clean  up the list of plugins
-Logger.clearPlugins()
-# retrieve a logger with the specified name
-log = Logger.getLogger("Log Name")
-```
-
-The logger contract is:
-
-```ruby
-log.isDebug() // return if in debug or trace level
-log.trace("trace something")
-log.debug("debug something")
-log.info("info something")
-log.warn("warn something")
-log.error("error something")
-```
-
-The plugins must follow this contract:
-
-```ruby
-plugin = {
-  name: 'mock',
-  isDebug: Function.apply(),
-  trace: Function.apply(),
-  debug: Function.apply(),
-  info: Function.apply(),
-  warn: Function.apply(),
-  error: Function.apply()
-};
-```
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem ' logger-facade'
+    gem ' logger_facade'
 
 And then execute:
 
@@ -61,39 +24,46 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install logger-facade
+    $ gem install logger_facade
 
 ## How to use it
 
 Install it:
 
 ```
-gem install logger-facade
+gem install logger_facade
 ```
 
 Set up plugins
 
 ```ruby
-require 'logger-facade'
+require 'logger_facade'
 
-var plugin = {
-  name: 'mock',
-  isDebug: Function.apply(),
-  trace: Function.apply(),
-  debug: Function.apply(),
-  info: Function.apply(),
-  warn: Function.apply(),
-  error: Function.apply()
-};
+# this is default config for Console plugin
+config = {
+  level: :info,
+  time_format: '%y-%M-%d %H:%M:%S',
+  message_format: '%time | %level | %logger - %msg'
+}
 
-Logger.use(plugin)
+# configuration is optional in console plugin
+plugin = LoggerFacade::Plugins::Console.new(config);
 
-log = Logger.getLogger("Log Name")
+# hook plugin/s
+LoggerFacade::Manager.use(plugin)
 
+# obtain class logger
+log = LoggerFacade::Manager.get_logger("Log Name")
+
+# log
 log.debug("something to log")
+log.info("something to log in info")
 
-log.info("something to log in %s", 'info')
+# log exception directly
+log.error(Exception.new("some caught exception"))
 ```
+
+**NOTE**: Console plugin uses check [strftime](http://www.ruby-doc.org/core-2.1.2/Time.html#method-i-strftime) formats.
 
 ## Available plugins
 * Console
@@ -104,6 +74,46 @@ log.info("something to log in %s", 'info')
 
 Feel free to create one and get in touch with me, that i will add it to this list.
 
+## LoggerFacade::Manager Contract
+
+```ruby
+# register a plugin on logger
+LoggerFacade::Manager.use(plugin)
+# retrieve the list of plugin names
+LoggerFacade::Manager.plugins()
+# clean  up the list of registered plugins
+LoggerFacade::Manager.clearPlugins()
+# retrieve a logger with the specified name
+log = LoggerFacade::Manager.getLogger("Log Name")
+```
+
+## LoggerFacade::Log Contract
+
+```ruby
+log.isDebug() # return if in debug or trace level
+log.trace("trace something")
+log.debug("debug something")
+log.info("info something")
+log.warn("warn something")
+log.error("error something")
+log.error(Exception.new('some caught exception'))
+```
+
+## LoggerFacade::Plugins
+
+The plugins must follow this contract:
+
+```
+# plugin name
+#name
+
+#isDebug
+#trace
+#debug
+#info
+#warn
+#error
+```
 
 ## Contributing
 
