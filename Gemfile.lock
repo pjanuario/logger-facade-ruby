@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     logger_facade (0.0.0)
-      hashie
+      hashie (~> 3.2)
 
 GEM
   remote: https://rubygems.org/
@@ -44,11 +44,11 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bump
+  bump (~> 0.5)
   bundler (~> 1.6)
-  codeclimate-test-reporter
+  codeclimate-test-reporter (~> 0.3)
   logger_facade!
-  pry
-  rake
-  rspec
-  simplecov
+  pry (~> 0.10)
+  rake (~> 10.3)
+  rspec (~> 3.0)
+  simplecov (~> 0.9)
