@@ -3,7 +3,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require './lib/logger_facade/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'logger-facade'
+  spec.name          = 'logger_facade'
   spec.version       = LoggerFacade::VERSION
   spec.authors       = ["Pedro Januário"]
   spec.email         = ["prnjanuario@gmail.com"]
