@@ -2,12 +2,20 @@ PATH
   remote: .
   specs:
     logger_facade (0.1.0)
+      airbrake (~> 4.0)
       hashie (~> 3.2)
+      sucker_punch (~> 1.1)
 
 GEM
   remote: https://rubygems.org/
   specs:
+    airbrake (4.0.0)
+      builder
+      multi_json
+    builder (3.2.2)
     bump (0.5.0)
+    celluloid (0.15.2)
+      timers (~> 1.1.0)
     codeclimate-test-reporter (0.3.0)
       simplecov (>= 0.7.1, < 1.0.0)
     coderay (1.1.0)
@@ -39,6 +47,9 @@ GEM
       simplecov-html (~> 0.8.0)
     simplecov-html (0.8.0)
     slop (3.6.0)
+    sucker_punch (1.1)
+      celluloid (~> 0.15.2)
+    timers (1.1.0)
 
 PLATFORMS
   ruby
