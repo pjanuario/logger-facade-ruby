@@ -5,7 +5,7 @@
 
 # Logger Facade Ruby
 
-[![version](https://badge.fury.io/rb/logger-facade-ruby.svg)](https://rubygems.org/gems/logger-facade)
+[![version](https://badge.fury.io/rb/logger_facade.svg)](https://rubygems.org/gems/logger_facade)
 
 
 Simple class library to work as logger facade.
