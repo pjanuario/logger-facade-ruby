@@ -31,4 +31,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'bump', '~> 0.5'
 
   spec.add_dependency 'hashie', '~> 3.2'
+  spec.add_dependency 'airbrake', '~> 4.0'
+  # sucker punch is used to use airbrake async
+  spec.add_dependency 'sucker_punch', '~> 1.1'
 end
