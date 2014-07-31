@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe LoggerFacade::Plugins::Airbrake do
 
-  subject { described_class.new }
+  subject { described_class.new(:test) }
 
   before :each do
 
@@ -56,10 +56,11 @@ describe LoggerFacade::Plugins::Airbrake do
         message = "call with message"
         expect(::Airbrake).to receive(:notify_or_ignore)
            .with(hash_including(
-             :error_class   => "NAME::LogError",
-             :error_message => "NAME::LogError: #{message}",
-             :backtrace     => anything,
-             :cgi_data      => anything
+             :error_class     => "NAME::LogError",
+             :error_message   => "NAME::LogError: #{message}",
+             :backtrace       => anything,
+             :cgi_data        => anything,
+             :environment_name=> "test"
            )) { nil }
         subject.error("NAME", message)
       end
@@ -71,8 +72,9 @@ describe LoggerFacade::Plugins::Airbrake do
         e = Exception.new 'test notify'
         expect(::Airbrake).to receive(:notify_or_ignore)
            .with(e, hash_including(
-             :backtrace     => anything,
-             :cgi_data      => anything
+             :backtrace       => anything,
+             :cgi_data        => anything,
+             :environment_name=> "test"
            )) { nil }
         subject.error("NAME", e)
       end

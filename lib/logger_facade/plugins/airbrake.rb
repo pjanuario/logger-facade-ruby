@@ -4,10 +4,11 @@ module LoggerFacade::Plugins
 
   class Airbrake
 
-    attr_reader :name
+    attr_reader :name, :environment
 
-    def initialize(config = {})
+    def initialize(environment = nil)
       @name = "LoggerFacade::Plugins::Airbrake"
+      @environment = environment.to_s
 
       ::Airbrake.configure do |config|
         config.host    = nil
@@ -67,14 +68,16 @@ module LoggerFacade::Plugins
         :error_message    => "#{logger}::LogError: #{message}",
         :backtrace        => $@,
         :cgi_data         => ENV.to_hash,
+        :environment_name => environment
       )
     end
 
     def notify_exception(e, logger)
       ::Airbrake.notify_or_ignore(
         e,
-        :backtrace     => $@,
-        :cgi_data      => ENV.to_hash,
+        :backtrace        => $@,
+        :cgi_data         => ENV.to_hash,
+        :environment_name => environment
       )
     end
 
