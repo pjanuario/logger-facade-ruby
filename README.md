@@ -39,13 +39,6 @@ Set up plugins
 ```ruby
 require 'logger_facade'
 
-# this is default config for Console plugin
-config = {
-  level: :info,
-  time_format: '%y-%M-%d %H:%M:%S',
-  message_format: '%time | %level | %logger - %msg'
-}
-
 # configuration is optional in console plugin
 plugin = LoggerFacade::Plugins::Console.new(config);
 
@@ -66,8 +59,8 @@ log.error(Exception.new("some caught exception"))
 **NOTE**: Console plugin uses check [strftime](http://www.ruby-doc.org/core-2.1.2/Time.html#method-i-strftime) formats.
 
 ## Available plugins
-* Console
-* Airbrake (Will be developed soon)
+* [Console](#loggerfacadepluginsconsole)
+* [Airbrake](#loggerfacadepluginsairbrake)
 * Elasticsearch (Will be developed soon)
 
 ** Do you need some other plugin?**
@@ -114,6 +107,38 @@ The plugins must follow this contract:
 #warn
 #error
 ```
+
+## Plugins available
+
+### LoggerFacade::Plugins::Console
+
+```ruby
+# this is default config for Console plugin
+config = {
+  level: :info,
+  time_format: '%y-%M-%d %H:%M:%S',
+  message_format: '%time | %level | %logger - %msg'
+}
+
+# configuration is optional in console plugin
+plugin = LoggerFacade::Plugins::Console.new(config);
+LoggerFacade::Manager.use(plugin)
+```
+
+### LoggerFacade::Plugins::Airbrake
+
+```ruby
+env = 'production'
+plugin = LoggerFacade::Plugins::Airbrake.new(env)
+plugin.configure do |config|
+  config.api_key = "airbrake.api_key"
+  config.host = "airbrake.host"
+  config.port = "airbrake.port"
+  config.secure = config.port == 443
+end
+LoggerFacade::Manager.use(plugin)
+```
+
 
 ## Contributing
 
