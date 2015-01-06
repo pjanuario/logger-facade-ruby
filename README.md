@@ -151,18 +151,19 @@ LoggerFacade::Manager.use(plugin)
 ## Bump versioning
 
 We use [bump gem](https://github.com/gregorym/bump) to control gem versioning.
+Use --tag to generate commit and tag for each version.
 
 Bump Patch version
 
-    $ bump patch
+    $ bump patch --tag
 
 Bump Minor version
 
-    $ bump minor
+    $ bump minor --tag
 
 Bump Major version
 
-    $ bump major
+    $ bump major --tag
 
 ## Running Specs
 
