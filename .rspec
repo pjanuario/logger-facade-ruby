@@ -1,1 +1,1 @@
--f doc --color
+-f doc --color --require spec_helper
