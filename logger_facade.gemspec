@@ -29,6 +29,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'simplecov', '~> 0.9'
   spec.add_development_dependency 'codeclimate-test-reporter', '~> 0.3'
   spec.add_development_dependency 'bump', '~> 0.5'
+  spec.add_development_dependency 'rack', '~> 1.6'
 
   spec.add_dependency 'hashie', '~> 3.2'
   spec.add_dependency 'airbrake', '~> 4.0'

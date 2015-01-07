@@ -23,3 +23,16 @@ RSpec.configure do |c|
     }
   end
 end
+
+module TimeTestHelper
+  def with_mock_time(t = 0)
+    mc = class <<Time; self; end
+    mc.send :alias_method, :old_now, :now
+    mc.send :define_method, :now do
+      at(t)
+    end
+    yield
+  ensure
+    mc.send :alias_method, :now, :old_now
+  end
+end

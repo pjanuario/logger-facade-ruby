@@ -58,6 +58,19 @@ log.error(Exception.new("some caught exception"))
 
 **NOTE**: Console plugin uses check [strftime](http://www.ruby-doc.org/core-2.1.2/Time.html#method-i-strftime) formats.
 
+### With Sinatra
+
+```ruby
+require 'logger_facade'
+require 'logger_facade/middleware/rack'
+
+plugin = LoggerFacade::Plugins::Console.new({ level: Settings.logging.console.level })
+LoggerFacade::Manager.use(plugin)
+
+set :logging, nil
+use LoggerFacade::Middleware::Rack
+```
+
 ## Available plugins
 * [Console](#loggerfacadepluginsconsole)
 * [Airbrake](#loggerfacadepluginsairbrake)
