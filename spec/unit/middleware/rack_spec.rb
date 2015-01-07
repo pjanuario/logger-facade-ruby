@@ -45,4 +45,20 @@ describe LoggerFacade::Middleware::Rack do
       Rack::MockRequest.new(described_class.new(app)).get("/path?q=true")
     end
   end
+
+  it "log with metadata" do
+    expect(logger).to receive(:info)
+      .with(anything, {
+        'client_ip'     => nil,
+        'method'        => "GET",
+        'path'          => "/path",
+        'query_string'  => "q=true",
+        'status'        => 200,
+        'size'          => 6,
+        'response_time' => 0.0
+      })
+    with_mock_time do
+      Rack::MockRequest.new(described_class.new(app)).get("/path?q=true")
+    end
+  end
 end

@@ -20,7 +20,7 @@ module LoggerFacade::Middleware
         metadata["size"],
         metadata["response_time"] ]
 
-      @logger.info(msg)
+      @logger.info(msg, metadata)
     end
 
     def get_metadata(env, status, header, began_at)
@@ -31,7 +31,7 @@ module LoggerFacade::Middleware
         'path'          => env["PATH_INFO"],
         'query_string'  => env["QUERY_STRING"],
         'status'        => status,
-        'size'          => length,
+        'size'          => length.to_i,
         'response_time' => Time.now - began_at
       }
     end
