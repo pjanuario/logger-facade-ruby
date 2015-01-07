@@ -60,26 +60,24 @@ module LoggerFacade::Plugins
     end
 
     def message(level, msg, logger)
-      outputMsg = msg
+      msg = log_exception(msg) if msg.is_a? Exception
 
-      if msg.is_a? Exception
-        outputMsg = "#{msg.message}\n#{(msg.backtrace || []).join("\n")}"
-      end
-
-      formatedMessage = config.message_format
+      config.message_format
         .gsub('%logger', logger.upcase)
         .gsub('%time', Time.now.utc.strftime(config.time_format))
         .gsub('%level', level.to_s.upcase)
         .gsub('%pid', Process.pid.to_s)
-        .gsub('%msg', outputMsg)
-
-      return formatedMessage;
+        .gsub('%msg', msg)
     end
 
     def log(log_level, message, logger)
       return unless is_level_active(log_level)
 
       Kernel.puts message(log_level, message, logger)
+    end
+
+    def log_exception(msg)
+      "#{msg.message}\n#{(msg.backtrace || []).join("\n")}"
     end
 
   end
