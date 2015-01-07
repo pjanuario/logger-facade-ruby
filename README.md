@@ -97,28 +97,18 @@ log = LoggerFacade::Manager.getLogger("Log Name")
 
 ```ruby
 log.isDebug() # return if in debug or trace level
+metadata = { metadata: "some more context" }
+# log.trace(message, metadata = {})
 log.trace("trace something")
+# log.debug(message, metadata = {})
 log.debug("debug something")
+# log.info(message, metadata = {})
 log.info("info something")
+# log.warn(message, metadata = {})
 log.warn("warn something")
-log.error("error something")
+# log.error(message, metadata = {})
+log.error("error something", metadata)
 log.error(Exception.new('some caught exception'))
-```
-
-## LoggerFacade::Plugins
-
-The plugins must follow this contract:
-
-```
-# plugin name
-#name
-
-#isDebug
-#trace
-#debug
-#info
-#warn
-#error
 ```
 
 ## Plugins available
@@ -150,6 +140,27 @@ plugin.configure do |config|
   config.secure = config.port == 443
 end
 LoggerFacade::Manager.use(plugin)
+```
+
+## LoggerFacade::Plugins
+
+If you wanna use a custom plugin you just need to use an object that responds to the following contract:
+
+```ruby
+# the plugin name
+plugin.name
+# the plugin configuration
+plugin.config
+# the plugin level
+plugin.level
+
+def isDebug() # return if in debug or trace level
+def trace(logger, message, metadata: {})
+def debug(logger, message, metadata: {})
+def info(logger, message, metadata: {})
+def warn(logger, message, metadata: {})
+def error(logger, message, metadata: {})
+def error(logger, exception, metadata: {})
 ```
 
 

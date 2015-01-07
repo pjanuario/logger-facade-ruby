@@ -13,31 +13,31 @@ module LoggerFacade
       plugins.select { |p| p.is_debug }.size > 0
     end
 
-    def trace(message)
-      log(:trace, message)
+    def trace(message, metadata = {})
+      log(:trace, message, metadata)
     end
 
-    def debug(message)
-      log(:debug, message)
+    def debug(message, metadata = {})
+      log(:debug, message, metadata)
     end
 
-    def info(message)
-      log(:info, message)
+    def info(message, metadata = {})
+      log(:info, message, metadata)
     end
 
-    def warn(message)
-      log(:warn, message)
+    def warn(message, metadata = {})
+      log(:warn, message, metadata)
     end
 
-    def error(message)
-      log(:error, message)
+    def error(message, metadata = {})
+      log(:error, message, metadata)
     end
 
     private
 
-    def log(level, message)
+    def log(level, message, metadata)
       plugins.each do |plugin|
-        plugin.send(level, name, message)
+        plugin.send(level, name, message, metadata: metadata)
       end
     end
 

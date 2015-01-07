@@ -44,8 +44,16 @@ describe LoggerFacade::Log do
 
       it("calls the plugin in #{level} level") do
         message = "call with message"
-        expect(plugin).to receive(level.to_sym).with(subject.name, message)
+        expect(plugin).to receive(level.to_sym).with(subject.name, message, anything)
         subject.send(level.to_sym, message)
+      end
+
+      it("calls the plugin with metadata") do
+        message = "call with message"
+        metadata = double('metadata')
+        expect(plugin).to receive(level.to_sym)
+          .with(subject.name, message, hash_including(:metadata))
+        subject.send(level.to_sym, message, metadata)
       end
 
     end
