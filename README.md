@@ -71,6 +71,35 @@ set :logging, nil
 use LoggerFacade::Middleware::Rack
 ```
 
+### Injecting log with LoggerFacade::Loggable module
+
+```ruby
+class AwesomeLog
+  include LoggerFacade::Loggable
+
+  def action
+    log.debug("This will allow you to log into Logger with class name, here is 'AwesomeLog'")
+  end
+
+end
+
+# equivalent to
+
+class AwesomeLog
+
+  def action
+    log.debug("This will allow you to log into Logger with class name, here is 'AwesomeLog'")
+  end
+
+  private
+
+  def log
+    @log ||= LoggerFacade::Manager.get_logger("AwesomeLog")
+  end
+
+end
+```
+
 ## Available plugins
 * [Console](#loggerfacadepluginsconsole)
 * [Airbrake](#loggerfacadepluginsairbrake)
