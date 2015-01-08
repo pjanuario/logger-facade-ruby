@@ -36,6 +36,8 @@ module LoggerFacade
     private
 
     def log(level, message, metadata)
+      metadata[:timestamp] = Time.now.utc
+      metadata[:pid] = Process.pid
       plugins.each do |plugin|
         plugin.send(level, name, message, metadata: metadata)
       end
