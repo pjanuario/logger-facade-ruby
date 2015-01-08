@@ -24,7 +24,7 @@ module LoggerFacade::Plugins
     def log(log_level, message, logger, metadata)
       return unless is_level_active(log_level)
 
-      Kernel.puts message(log_level, message, logger)
+      write message(log_level, message, logger, metadata)
     end
 
     private
@@ -42,6 +42,10 @@ module LoggerFacade::Plugins
 
     def log_exception(msg)
       "#{msg.message}\n#{(msg.backtrace || []).join("\n")}"
+    end
+
+    def write(message)
+      Kernel.puts message
     end
 
   end
