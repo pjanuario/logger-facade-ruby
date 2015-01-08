@@ -103,7 +103,7 @@ end
 ## Available plugins
 * [Console](#loggerfacadepluginsconsole)
 * [Airbrake](#loggerfacadepluginsairbrake)
-* Elasticsearch (Will be developed soon)
+* [Logstash](loggerfacadepluginslogstash)
 
 ** Do you need some other plugin?**
 
@@ -169,6 +169,29 @@ plugin.configure do |config|
   config.secure = config.port == 443
 end
 LoggerFacade::Manager.use(plugin)
+```
+
+### LoggerFacade::Plugins::Logstash
+
+```ruby
+# this is default config for Console plugin
+config = { level: :debug }
+
+# configuration is optional in Logstash plugin
+plugin = LoggerFacade::Plugins::Logstash.new(config);
+LoggerFacade::Manager.use(plugin)
+
+
+# by default logrotation is disabled and you should consider using a proper tool such logrotate.
+# but you can use some Logger (from stdlib) options.
+config = {
+  level: :debug
+  device: {
+    shift_age: 'daily', # (optional) daily/weekly/monthly
+    shift_size: 1024000 # (optional) bytes
+  }
+}
+
 ```
 
 ## LoggerFacade::Plugins
