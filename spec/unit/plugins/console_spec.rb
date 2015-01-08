@@ -5,6 +5,7 @@ describe LoggerFacade::Plugins::Console do
   subject { described_class.new }
 
   let(:time) { Time.new(1983, 01, 25, 13, 10, 01, '+00:00') }
+  let(:metadata){ { timestamp: time, pid: 100 } }
 
   before :each do
     allow(Time).to receive(:now) { time }

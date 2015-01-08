@@ -29,14 +29,17 @@ module LoggerFacade::Plugins
 
     private
 
-    def message(level, msg, logger)
+    def message(level, msg, logger, metadata)
       msg = log_exception(msg) if msg.is_a? Exception
+
+      timestamp = metadata[:timestamp] || Time.now.utc
+      pid = metadata[:pid] || Process.pid
 
       config.message_format
         .gsub('%logger', logger.upcase)
-        .gsub('%time', Time.now.utc.strftime(config.time_format))
+        .gsub('%time', timestamp.strftime(config.time_format))
         .gsub('%level', level.to_s.upcase)
-        .gsub('%pid', Process.pid.to_s)
+        .gsub('%pid', pid.to_s)
         .gsub('%msg', msg)
     end
 
