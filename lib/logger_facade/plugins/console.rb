@@ -5,18 +5,13 @@ module LoggerFacade::Plugins
   class Console < Base
 
     def initialize(config = {})
-      super()
-
       defaults = {
         level: :info,
         time_format: '%y-%M-%d %H:%M:%S',
         message_format: '%time | %level | %logger - %msg'
       }
       config = defaults.merge(config)
-
-      @config = Hashie::Mash.new(config)
-      @level = @config.level.to_sym
-      @name = "LoggerFacade::Plugins::Console"
+      super("LoggerFacade::Plugins::Console", config)
     end
 
     protected

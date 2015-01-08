@@ -4,10 +4,10 @@ module LoggerFacade::Plugins
 
     attr_reader :config, :level, :name
 
-    def initialize
-      @config = Hashie::Mash.new
-      @level = :debug
-      @name = nil
+    def initialize(name, config = nil)
+      @config = Hashie::Mash.new(config)
+      @level = (@config.level || :debug).to_sym
+      @name = name
     end
 
     def is_debug
