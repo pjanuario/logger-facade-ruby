@@ -36,3 +36,18 @@ module TimeTestHelper
     mc.send :alias_method, :now, :old_now
   end
 end
+
+module LevelTestHelper
+  def next_level(lev)
+    levels = {
+      trace: 0,
+      debug: 1,
+      info:  2,
+      warn:  3,
+      error: 4
+    }
+
+    val = levels[lev.to_sym]
+    levels.select { |k,v| v > val }.keys.first
+  end
+end

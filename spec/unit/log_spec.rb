@@ -41,6 +41,8 @@ describe LoggerFacade::Log do
   %w(trace debug info warn error).each do |level|
 
     describe("##{level}") do
+      let(:time) { Time.new(1983, 01, 25, 13, 10, 01, '+00:00') }
+      let(:pid) { 0 }
 
       it("calls the plugin in #{level} level") do
         message = "call with message"
@@ -48,11 +50,45 @@ describe LoggerFacade::Log do
         subject.send(level.to_sym, message)
       end
 
-      it("calls the plugin with metadata") do
+      it("calls the plugin with metadata dictionary when not present") do
         message = "call with message"
-        metadata = double('metadata')
+        metadata = {}
         expect(plugin).to receive(level.to_sym)
-          .with(subject.name, message, hash_including(:metadata))
+          .with(subject.name, message,
+            hash_including(metadata: hash_including(:timestamp, :pid)))
+        subject.send(level.to_sym, message)
+      end
+
+      it("appends timestamp to metadata") do
+        allow(Time).to receive(:now) { time }
+        message = "call with message"
+        metadata = {}
+        expect(plugin).to receive(level.to_sym)
+          .with(subject.name, message,
+            hash_including(metadata: hash_including(timestamp: time))
+          )
+        subject.send(level.to_sym, message, metadata)
+      end
+
+      it("appends timestamp to metadata") do
+        allow(Time).to receive(:now) { time }
+        message = "call with message"
+        metadata = {}
+        expect(plugin).to receive(level.to_sym)
+          .with(subject.name, message,
+            hash_including(metadata: hash_including(timestamp: time))
+          )
+        subject.send(level.to_sym, message, metadata)
+      end
+
+      it("appends pid to metadata") do
+        allow(Process).to receive(:pid) { pid }
+        message = "call with message"
+        metadata = {}
+        expect(plugin).to receive(level.to_sym)
+          .with(subject.name, message,
+            hash_including(metadata: hash_including(pid: pid))
+          )
         subject.send(level.to_sym, message, metadata)
       end
 

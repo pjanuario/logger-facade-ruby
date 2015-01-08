@@ -45,20 +45,63 @@ describe LoggerFacade::Middleware::Rack do
       Rack::MockRequest.new(described_class.new(app)).get("/path?q=true")
     end
   end
+  
+  context 'with proper metadata' do
 
-  it "log with metadata" do
-    expect(logger).to receive(:info)
-      .with(anything, {
-        'client_ip'     => nil,
-        'method'        => "GET",
-        'path'          => "/path",
-        'query_string'  => "q=true",
-        'status'        => 200,
-        'size'          => 6,
-        'response_time' => 0.0
-      })
-    with_mock_time do
-      Rack::MockRequest.new(described_class.new(app)).get("/path?q=true")
+    after do
+      with_mock_time do
+        Rack::MockRequest.new(described_class.new(app)).get("/path?q=true")
+      end
+    end
+
+    it "log clientip as metadata" do
+      expect(logger).to receive(:info)
+        .with(anything, hash_including("clientip"))
+    end
+
+    it "log verb as metadata" do
+      expect(logger).to receive(:info)
+        .with(anything, hash_including("verb" => "GET"))
+    end
+
+    it "log request as metadata" do
+      expect(logger).to receive(:info)
+        .with(anything, hash_including("request" => "/path?q=true"))
+    end
+
+    it "log http_version as metadata" do
+      expect(logger).to receive(:info)
+        .with(anything, hash_including("http_version" => nil))
+    end
+
+    it "log response as metadata" do
+      expect(logger).to receive(:info)
+        .with(anything, hash_including("response" => "200"))
+    end
+
+    it "log bytes as metadata" do
+      expect(logger).to receive(:info)
+        .with(anything, hash_including("bytes" => length))
+    end
+
+    it "log referrer as metadata" do
+      expect(logger).to receive(:info)
+        .with(anything, hash_including("referrer" => nil))
+    end
+
+    it "log agent as metadata" do
+      expect(logger).to receive(:info)
+        .with(anything, hash_including("agent" => nil))
+    end
+
+    it "log request_time as metadata" do
+      expect(logger).to receive(:info)
+        .with(anything, hash_including("request_time" => 0.0))
+    end
+
+    it "log request_full_url as metadata" do
+      expect(logger).to receive(:info)
+        .with(anything, hash_including("request_full_url" => nil))
     end
   end
 end

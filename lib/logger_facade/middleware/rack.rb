@@ -2,7 +2,7 @@ module LoggerFacade::Middleware
   class Rack < Rack::CommonLogger
     def initialize(app, logger=nil)
       log = LoggerFacade::Manager.get_logger("RackLogger")
-      @format = '%s "%s %s%s" %d %s %0.4f'
+      @format = '%s "%s %s" %d %s %0.4f'
       super(app, log)
     end
 
@@ -12,27 +12,30 @@ module LoggerFacade::Middleware
       metadata = get_metadata(env, status, header, began_at)
 
       msg = @format % [
-        metadata["client_ip"] || "-",
-        metadata["method"],
-        metadata["path"],
-        metadata["query_string"].empty? ? "" : "?" + metadata["query_string"],
-        metadata["status"].to_s[0..3],
-        metadata["size"],
-        metadata["response_time"] ]
+        metadata["clientip"] || "-",
+        metadata["verb"],
+        metadata["request"],
+        metadata["response"].to_s[0..3],
+        metadata["bytes"],
+        metadata["request_time"] ]
 
       @logger.info(msg, metadata)
     end
 
     def get_metadata(env, status, header, began_at)
       length = extract_content_length(header)
+      qs = env["QUERY_STRING"].empty? ? "" : "?#{env["QUERY_STRING"]}"
       {
-        'client_ip'     => env['HTTP_X_FORWARDED_FOR'] || env["REMOTE_ADDR"],
-        'method'        => env["REQUEST_METHOD"],
-        'path'          => env["PATH_INFO"],
-        'query_string'  => env["QUERY_STRING"],
-        'status'        => status,
-        'size'          => length.to_i,
-        'response_time' => Time.now - began_at
+        'clientip'     => env['HTTP_X_FORWARDED_FOR'] || env["REMOTE_ADDR"],
+        'verb'        => env["REQUEST_METHOD"],
+        'request'          => "#{env["PATH_INFO"]}#{qs}",
+        'http_version'  => env["HTTP_VERSION"],
+        'response'        => status.to_s,
+        'bytes'          => (length || "").to_i,
+        'referrer'          => env["HTTP_REFERER"],
+        'agent'         => env['HTTP_USER_AGENT'],
+        'request_time' => Time.now - began_at,
+        'request_full_url' => env['REQUEST_URI']
       }
     end
 
