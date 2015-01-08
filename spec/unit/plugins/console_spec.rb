@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe LoggerFacade::Plugins::Console do
+  include LevelTestHelper
 
   subject { described_class.new }
 
@@ -22,19 +23,6 @@ describe LoggerFacade::Plugins::Console do
       expect(subject.is_debug).to be false
     end
 
-  end
-
-  def next_level(lev)
-    levels = {
-      trace: 0,
-      debug: 1,
-      info:  2,
-      warn:  3,
-      error: 4
-    }
-
-    val = levels[lev.to_sym]
-    levels.select { |k,v| v > val }.keys.first
   end
 
   %w(trace debug info warn error).each do |level|
