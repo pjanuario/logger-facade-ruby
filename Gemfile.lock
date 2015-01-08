@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    logger_facade (0.2.0)
+    logger_facade (0.3.0)
       airbrake (~> 4.0)
       hashie (~> 3.2)
       sucker_punch (~> 1.1)
