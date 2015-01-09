@@ -2,21 +2,14 @@ require 'airbrake'
 
 module LoggerFacade::Plugins
 
-  class Airbrake
+  class Airbrake < Base
 
-    attr_reader :name, :environment
+    attr_reader :environment
 
     def initialize(environment = nil)
-      @name = "LoggerFacade::Plugins::Airbrake"
+      super("LoggerFacade::Plugins::Airbrake", { level: :error })
       @environment = environment.to_s
-
-      ::Airbrake.configure do |config|
-        config.host    = nil
-        config.port    = 80
-        config.secure  = config.port == 443
-        config.async   = true
-        config.development_environments = %w(development test)
-      end
+      set_default_airbrake_config
     end
 
     def configure(&block)
@@ -25,27 +18,17 @@ module LoggerFacade::Plugins
       end
     end
 
-    def is_debug
-      false
+    protected
+
+    def log(log_level, message, logger, metadata)
+      return unless is_level_active(log_level)
+
+      notify(logger, message, metadata)
     end
 
-    def trace(logger, message, metadata: {})
-      # do nothing
-    end
+    private
 
-    def debug(logger, message, metadata: {})
-      # do nothing
-    end
-
-    def info(logger, message, metadata: {})
-      # do nothing
-    end
-
-    def warn(logger, message, metadata: {})
-      # do nothing
-    end
-
-    def error(logger, message, metadata: {})
+    def notify(logger, message, metadata)
       return unless valid_config
 
       if message.is_a? Exception
@@ -55,7 +38,15 @@ module LoggerFacade::Plugins
       end
     end
 
-    private
+    def set_default_airbrake_config
+      ::Airbrake.configure do |config|
+        config.host    = nil
+        config.port    = 80
+        config.secure  = config.port == 443
+        config.async   = true
+        config.development_environments = %w(development test)
+      end
+    end
 
     def valid_config
       config = ::Airbrake.configuration
