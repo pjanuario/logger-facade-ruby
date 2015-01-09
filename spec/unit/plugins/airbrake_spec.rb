@@ -4,6 +4,8 @@ describe LoggerFacade::Plugins::Airbrake do
 
   subject { described_class.new(:test) }
 
+  let(:message) { "call with message" }
+
   before :each do
 
     subject.configure do |c|
@@ -39,12 +41,26 @@ describe LoggerFacade::Plugins::Airbrake do
     context("logging in #{level} level") do
 
       it("doesn't notify") do
-        message = "call with message"
         expect(::Airbrake).not_to receive(:notify_or_ignore)
         subject.send(level.to_sym, "name", message)
       end
 
     end
+
+    context("accepts metadata") do
+
+      it("logging in #{level} level with metadata") do
+        expect(::Airbrake).not_to receive(:notify_or_ignore)
+        subject.send(level.to_sym, "name", message, metadata: { context: "info" })
+      end
+
+    end
+
+  end
+
+  %w(trace debug info warn error).each do |level|
+
+
 
   end
 
@@ -53,7 +69,6 @@ describe LoggerFacade::Plugins::Airbrake do
     context('with message') do
 
       it("notify") do
-        message = "call with message"
         expect(::Airbrake).to receive(:notify_or_ignore)
            .with(hash_including(
              :error_class     => "NAME::LogError",
@@ -79,6 +94,11 @@ describe LoggerFacade::Plugins::Airbrake do
         subject.error("NAME", e)
       end
 
+    end
+
+    it("accepts metadata") do
+      expect(::Airbrake).to receive(:notify_or_ignore)
+      subject.error("name", message, metadata: { context: "information" })
     end
 
   end

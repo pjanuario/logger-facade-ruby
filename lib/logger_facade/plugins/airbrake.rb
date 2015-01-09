@@ -29,23 +29,23 @@ module LoggerFacade::Plugins
       false
     end
 
-    def trace(logger, message)
+    def trace(logger, message, metadata: {})
       # do nothing
     end
 
-    def debug(logger, message)
+    def debug(logger, message, metadata: {})
       # do nothing
     end
 
-    def info(logger, message)
+    def info(logger, message, metadata: {})
       # do nothing
     end
 
-    def warn(logger, message)
+    def warn(logger, message, metadata: {})
       # do nothing
     end
 
-    def error(logger, message)
+    def error(logger, message, metadata: {})
       return unless valid_config
 
       if message.is_a? Exception
