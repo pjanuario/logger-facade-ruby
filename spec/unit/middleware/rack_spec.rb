@@ -45,7 +45,33 @@ describe LoggerFacade::Middleware::Rack do
       Rack::MockRequest.new(described_class.new(app)).get("/path?q=true")
     end
   end
-  
+
+  context 'severity' do
+
+    it "log 200 status to info" do
+      expect(logger).to receive(:info)
+      Rack::MockRequest.new(described_class.new(app)).get("/path")
+    end
+
+    it "log 300 status to info" do
+      expect(logger).to receive(:info)
+      Rack::MockRequest.new(described_class.new(app)).get("/path")
+    end
+
+    it "log 400 status to warn" do
+      expect(logger).to receive(:warn)
+      app = -> (env) { [400, env, "app"] }
+      Rack::MockRequest.new(described_class.new(app)).get("/path")
+    end
+
+    it "log 500 status to error" do
+      expect(logger).to receive(:error)
+      app = -> (env) { [500, env, "app"] }
+      Rack::MockRequest.new(described_class.new(app)).get("/path")
+    end
+
+  end
+
   context 'with proper metadata' do
 
     after do
