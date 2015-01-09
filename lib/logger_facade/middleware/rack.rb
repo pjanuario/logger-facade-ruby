@@ -19,7 +19,8 @@ module LoggerFacade::Middleware
         metadata["bytes"],
         metadata["request_time"] ]
 
-      @logger.info(msg, metadata)
+      severity = get_severity(metadata["response"])
+      @logger.send(severity, msg, metadata)
     end
 
     def get_metadata(env, status, header, began_at)
@@ -37,6 +38,17 @@ module LoggerFacade::Middleware
         'request_time' => Time.now - began_at,
         'request_full_url' => env['REQUEST_URI']
       }
+    end
+
+    def get_severity(status)
+      status = status.to_i
+      if status >= 400 and status < 500
+        :warn
+      elsif status >= 500
+        :error
+      else
+        :info
+      end
     end
 
   end
