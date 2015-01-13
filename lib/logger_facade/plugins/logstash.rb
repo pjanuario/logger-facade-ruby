@@ -8,8 +8,12 @@ module LoggerFacade::Plugins
       super("LoggerFacade::Plugins::Logstash", configuration)
 
       fail "Invalid configuration filename: #{config.filename}" unless config.filename
+    end
 
-      @logdevice = if config["device"]
+    private
+
+    def logdevice
+      @logdevice ||= if config["device"]
         shift_age = config.device["shift_age"]
         shift_size = config.device["shift_size"]
         LogDeviceWithRotation.new(config.filename, shift_age, shift_size)
@@ -17,10 +21,6 @@ module LoggerFacade::Plugins
         LogDeviceWithoutRotation.new(config.filename)
       end
     end
-
-    private
-
-    attr_reader :logdevice
 
     def log(severity, message, logger, metadata)
       return unless is_level_active(severity)
@@ -37,8 +37,8 @@ module LoggerFacade::Plugins
        '@timestamp' => ts.iso8601,
        '@fields'    => metadata
       }
-      
-      @logdevice.write("#{Yajl::Encoder.encode(json)}\n")
+
+      logdevice.write("#{Yajl::Encoder.encode(json)}\n")
     end
 
     class LogDeviceWithRotation < ::Logger::LogDevice
