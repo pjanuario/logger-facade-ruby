@@ -16,14 +16,6 @@ require 'logger_facade'
 
 Dir['spec/support/**/*.rb'].each &method(:require)
 
-RSpec.configure do |c|
-  c.around(:each) do |example|
-    Timeout::timeout(2) {
-      example.run
-    }
-  end
-end
-
 module TimeTestHelper
   def with_mock_time(t = 0)
     mc = class <<Time; self; end
