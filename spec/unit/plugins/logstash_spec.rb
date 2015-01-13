@@ -1,5 +1,3 @@
-require 'json'
-
 describe LoggerFacade::Plugins::Logstash do
   include LevelTestHelper
 
@@ -76,7 +74,7 @@ describe LoggerFacade::Plugins::Logstash do
           it("writes a valid json") do
             expect(file).to receive(:write) do |msg|
               data = nil
-              expect { data = JSON.parse(msg) }.not_to raise_exception
+              expect { data = Yajl::Parser.new.parse(msg) }.not_to raise_exception
               expect(data).to be
             end
             subject.send(severity, logger, message)
@@ -96,7 +94,7 @@ describe LoggerFacade::Plugins::Logstash do
 
             it("writes logstash timestamp format") do
               expect(file).to receive(:write) do |msg|
-                data = JSON.parse(msg)
+                data = Yajl::Parser.new.parse(msg)
                 expect(data["@timestamp"]).to eq(time.iso8601)
               end
               subject.send(severity, logger, message)
@@ -104,7 +102,7 @@ describe LoggerFacade::Plugins::Logstash do
 
             it("uses metadata timestamp") do
               expect(file).to receive(:write) do |msg|
-                data = JSON.parse(msg)
+                data = Yajl::Parser.new.parse(msg)
                 expect(data["@timestamp"]).to eq(ts.iso8601)
               end
               subject.send(severity, logger, message, metadata: metadata)
@@ -112,7 +110,7 @@ describe LoggerFacade::Plugins::Logstash do
 
             it("doesn't write field timestamp") do
               expect(file).to receive(:write) do |msg|
-                data = JSON.parse(msg)["@fields"]
+                data = Yajl::Parser.new.parse(msg)["@fields"]
                 expect(data["timestamp"]).to be_nil
               end
               subject.send(severity, logger, message, metadata: metadata)
@@ -121,7 +119,7 @@ describe LoggerFacade::Plugins::Logstash do
 
           it("writes fields") do
             expect(file).to receive(:write) do |msg|
-              data = JSON.parse(msg)
+              data = Yajl::Parser.new.parse(msg)
               expect(data["@fields"]).to be
             end
             subject.send(severity, logger, message)
@@ -129,7 +127,7 @@ describe LoggerFacade::Plugins::Logstash do
 
           it("writes severity") do
             expect(file).to receive(:write) do |msg|
-              data = JSON.parse(msg)["@fields"]
+              data = Yajl::Parser.new.parse(msg)["@fields"]
               expect(data["severity"]).to eq(severity.to_s)
             end
             subject.send(severity, logger, message)
@@ -137,7 +135,7 @@ describe LoggerFacade::Plugins::Logstash do
 
           it("writes logger") do
             expect(file).to receive(:write) do |msg|
-              data = JSON.parse(msg)["@fields"]
+              data = Yajl::Parser.new.parse(msg)["@fields"]
               expect(data["logger"]).to eq(logger)
             end
             subject.send(severity, logger, message)
@@ -145,7 +143,7 @@ describe LoggerFacade::Plugins::Logstash do
 
           it("writes message") do
             expect(file).to receive(:write) do |msg|
-              data = JSON.parse(msg)["@fields"]
+              data = Yajl::Parser.new.parse(msg)["@fields"]
               expect(data["message"]).to eq(message)
             end
             subject.send(severity, logger, message)
@@ -154,7 +152,7 @@ describe LoggerFacade::Plugins::Logstash do
           it("writes other metadata fields") do
             metadata = { context: true }
             expect(file).to receive(:write) do |msg|
-              data = JSON.parse(msg)["@fields"]
+              data = Yajl::Parser.new.parse(msg)["@fields"]
               expect(data["context"]).to eq(true)
             end
             subject.send(severity, logger, message, metadata: metadata)
@@ -165,7 +163,7 @@ describe LoggerFacade::Plugins::Logstash do
             it('writes the exception message') do
               error = Exception.new('test log')
               expect(file).to receive(:write) do |msg|
-                data = JSON.parse(msg)["@fields"]
+                data = Yajl::Parser.new.parse(msg)["@fields"]
                 expect(data["message"]).to eq("test log")
               end
               subject.send(severity, logger, error)
@@ -175,7 +173,7 @@ describe LoggerFacade::Plugins::Logstash do
               error = Exception.new('test log')
               error.set_backtrace "stacktrace"
               expect(file).to receive(:write) do |msg|
-                data = JSON.parse(msg)["@fields"]
+                data = Yajl::Parser.new.parse(msg)["@fields"]
                 expect(data["backtrace"]).to eq(error.backtrace)
               end
               subject.send(severity, logger, error)
