@@ -174,10 +174,8 @@ LoggerFacade::Manager.use(plugin)
 ### LoggerFacade::Plugins::Logstash
 
 ```ruby
-# this is default config for Console plugin
-config = { level: :debug }
-
-# configuration is optional in Logstash plugin
+# required paramaters config
+config = { level: :debug, filename: '/tmp/log.logstash' }
 plugin = LoggerFacade::Plugins::Logstash.new(config);
 LoggerFacade::Manager.use(plugin)
 
@@ -185,7 +183,8 @@ LoggerFacade::Manager.use(plugin)
 # by default logrotation is disabled and you should consider using a proper tool such logrotate.
 # but you can use some Logger (from stdlib) options.
 config = {
-  level: :debug
+  level: :debug,
+  filename: '/tmp/log.logstash',
   device: {
     shift_age: 'daily', # (optional) daily/weekly/monthly
     shift_size: 1024000 # (optional) bytes
@@ -193,6 +192,8 @@ config = {
 }
 
 ```
+
+**NOTE:** When using with ruby daemons gem, use absolute path for file configuration.
 
 ## LoggerFacade::Plugins
 

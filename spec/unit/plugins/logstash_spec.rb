@@ -19,7 +19,8 @@ describe LoggerFacade::Plugins::Logstash do
     it 'defaults to logdevice without rotation' do
       expect(LoggerFacade::Plugins::Logstash::LogDeviceWithoutRotation)
         .to receive(:new).with(filename)
-      described_class.new(config)
+      subject = described_class.new(config)
+      subject.debug("logger", "message")
     end
 
     it 'uses ruby Logger config' do
@@ -28,7 +29,8 @@ describe LoggerFacade::Plugins::Logstash do
       config[:device] = { shift_age: age, shift_size: size }
       expect(LoggerFacade::Plugins::Logstash::LogDeviceWithRotation)
         .to receive(:new).with(filename, age, size)
-      described_class.new(config)
+      subject = described_class.new(config)
+      subject.debug("logger", "message")
     end
 
     it 'raises an error on invalid filename configuration' do
