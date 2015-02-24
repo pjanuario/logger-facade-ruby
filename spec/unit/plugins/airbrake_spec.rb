@@ -59,12 +59,6 @@ describe LoggerFacade::Plugins::Airbrake do
 
   end
 
-  %w(trace debug info warn error).each do |level|
-
-
-
-  end
-
   context("logging in error level") do
 
     context 'on development environment' do
