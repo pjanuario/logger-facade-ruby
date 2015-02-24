@@ -11,6 +11,7 @@ describe LoggerFacade::Plugins::Airbrake do
     subject.configure do |c|
       c.host = "host.test"
       c.api_key = "key.test"
+      c.development_environments = %w()
     end
 
   end
@@ -65,6 +66,20 @@ describe LoggerFacade::Plugins::Airbrake do
   end
 
   context("logging in error level") do
+
+    context 'on development environment' do
+      before :each do
+        subject.configure do |c|
+          c.development_environments = %w(test)
+        end
+      end
+
+      it("doesn't notify") do
+        expect(::Airbrake).not_to receive(:notify_or_ignore)
+        subject.error("name", message)
+      end
+
+    end
 
     context('with message') do
 

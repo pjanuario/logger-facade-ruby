@@ -22,11 +22,16 @@ module LoggerFacade::Plugins
 
     def log(log_level, message, logger, metadata)
       return unless is_level_active(log_level)
+      return if is_dev_env?
 
       notify(logger, message, metadata)
     end
 
     private
+
+    def is_dev_env?
+      ::Airbrake.configuration.development_environments.include? environment
+    end
 
     def notify(logger, message, metadata)
       return unless valid_config
