@@ -35,6 +35,4 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'airbrake', '~> 4.0'
   # sucker punch is used to use airbrake async
   spec.add_dependency 'sucker_punch', '~> 1.1'
-  # used by logstash plugin, for better performance
-  spec.add_dependency 'yajl-ruby', '~> 1.2'
 end

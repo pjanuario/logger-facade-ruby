@@ -1,5 +1,5 @@
 require 'logger'
-require 'yajl'
+require 'json'
 
 module LoggerFacade::Plugins
   class Logstash < Base
@@ -38,7 +38,7 @@ module LoggerFacade::Plugins
        '@fields'    => metadata
       }
 
-      logdevice.write("#{Yajl::Encoder.encode(json)}\n")
+      logdevice.write("#{JSON.generate(json)}\n")
     end
 
     class LogDeviceWithRotation < ::Logger::LogDevice
